@@ -1,0 +1,148 @@
+<section>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/home">STOCKER</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="/home">Home </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/dashboard">Dashboard </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/usuarios">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/proveedores">Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/productos">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/clientes">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pedidos">Pedidos</a>
+                </li>
+            </ul>
+            <div class="dropdown">
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-label="Third group">
+                    <img [src]="_usuarioService.usuario.img | imagen: 'usuarios'" width="35" height="35"
+                        class="d-inline-block align-top" alt="">
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">{{_usuarioService.usuario.email}}</a>
+                    <a class="dropdown-item" href="/profile">Ver Perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/login" (click)="eliminarStorage()">Salir</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</section>
+<!-- <div class="container m-5"> -->
+<section>
+    <!-- <div class="container py-4"> -->
+    <div class="row m-2">
+        <div class="col-md-12 py-4">
+            <div class="row animated fadeIn">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-title">
+                            <h3 class="text-center mt-2 subtitulo"> Gestion de Pedidos </h3>
+                            <hr>
+                        </div>
+                        <div class="card-body">
+                            <div class="">
+                                <h5 class="text-center mt-2 subtitulo">Pedidos Registrados (<small>{{totalRegistros}}</small>)</h5>
+                            </div>
+                            <div class="col text-center">
+                                <input #input (keyup)="buscarPedido(input.value)" type="text" class="form-control mt-4" placeholder="Buscar Pedidos...">
+                                <button *ngIf="this._usuarioService.usuario.role == 'ADMIN_ROLE' || this._usuarioService.usuario.role == 'SALES_ROLE' " routerLink="/pedidos/cargarpedido" class="btn btn-dark btn-small align-baseline buttoncontent mt-2">
+                                            <fa-icon [icon]="faPlus"></fa-icon>
+                                            Registrar nuevo pedido
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive table-bordered">
+                <table class="table table-dark table-hover">
+                    <thead class="thead-dark text-center text-capitalize">
+                        <tr>
+                            <th>Número de Pedido</th>
+                            <th>Cliente</th>
+                            <th>Productos</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                            <th *ngIf="this._usuarioService.usuario.role == 'ADMIN_ROLE' || this._usuarioService.usuario.role == 'SALES_ROLE' || this._usuarioService.usuario.role == 'DEPOSIT_ROLE'">
+                                Estado</th>
+                            <th>Modificado por</th>
+                            <th *ngIf="this._usuarioService.usuario.role == 'ADMIN_ROLE' || this._usuarioService.usuario.role == 'SALES_ROLE'">
+                                Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pedido of pedidos">
+
+                            <td class="text text-center">
+                                {{pedido.numero_pedido}}
+                            </td>
+                            <td class="text text-center">
+                                {{pedido.cliente.nombre}}
+                            </td>
+                            <td class="text text-center">
+                                {{pedido.producto.nombre}}
+                            </td>
+                            <td class="text text-center">
+                                {{pedido.cantidad}}
+                            </td>
+                            <td class="text text-center">
+                                $ {{pedido.producto.precio}}
+                            </td>
+                            <td class="text text-center">
+                                $ {{pedido.total}}
+                            </td>
+
+                            <td *ngIf="this._usuarioService.usuario.role == 'ADMIN_ROLE' || this._usuarioService.usuario.role == 'SALES_ROLE' || this._usuarioService.usuario.role == 'DEPOSIT_ROLE' ">
+                                <select *ngIf="pedido.estado == 'preparación'" [(ngModel)]="pedido.estado" name="role" class="form-control" (change)="cambiarEstado(pedido, $event.target.value)">
+                                            <option value="preparación">PREPARACION</option>
+                                            <option value="enviado">ENVIADO</option>
+                                            <option value="cancelado">CANCELADO</option>
+
+                                        </select>
+
+                                <select *ngIf="pedido.estado == 'enviado'" [(ngModel)]="pedido.estado" name="role" class="form-control" (change)="cambiarEstado(pedido, $event.target.value)">
+                                                <option disabled value="enviado">ENVIADO</option>
+                                </select>
+                           
+
+                                <select *ngIf="pedido.estado == 'cancelado'" [(ngModel)]="pedido.estado" name="role" class="form-control">
+                                            <option disabled value="cancelado">CANCELADO</option>
+                                        </select>
+                            </td>
+
+                            <td class="text text-center">
+                                {{pedido.usuario.email}}
+                            </td>
+
+                            <td *ngIf="(this._usuarioService.usuario.role == 'ADMIN_ROLE' || this._usuarioService.usuario.role == 'SALES_ROLE') && (pedido.estado == 'preparación')">
+                                <button (click)="guardarStorage(token,pedido)" routerLink="/pedido/actualizarpedido" class="btn btn-success">
+                                            <fa-icon [icon]="faEdit"></fa-icon>
+
+                                        </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
