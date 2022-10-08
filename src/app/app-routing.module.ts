@@ -24,7 +24,7 @@ import { CargarUsuariosComponent } from './pages/cargar-usuarios/cargar-usuarios
 
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent , data: {titulo: 'Home'}},
+ 
   { path: 'register', component: RegisterComponent, data: {titulo: 'Registrarse en StockerApp'}},
   { path: 'login', component: LoginComponent, data: {titulo: 'Login'},  },
   { path: 'dashboard', component: DashboardComponent, data: {titulo: 'Dashboard'},  },
@@ -40,12 +40,9 @@ const routes: Routes = [
   { path: 'clientes', component: ClientesComponent , data: {titulo: 'Pagina de Clientes'}},
   { path: 'clientes/cargarcliente', component: CargarClienteComponent , data: {titulo: 'Cargar nuevos clientes'}},
   { path: 'cliente/actualizarcliente', component: ActualizarClienteComponent , data: {titulo: 'Ver - Modificar Cliente'}},
-  { path: 'pedidos', component: PedidosComponent, data: {titulo: 'Pagina de Pedido'}},
-  { path: 'pedidos/cargarpedido', component: CargarPedidosComponent , data: {titulo: 'Cargar nuevos pedidos'}},
-  { path: 'pedido/actualizarpedido', component: ActualizarPedidoComponent , data: {titulo: 'Ver - Modificar pedidos'}},
-  { path: 'cliente/clientepedido', component: ClientePedidosComponent, data: {titulo: 'Pedidos del clientes'}},
+ 
   { path: 'usuario/cargarusuario', component: CargarUsuariosComponent, data: {titulo: 'Cargar un nuevo Usuario'}},
-  { path: '**', redirectTo: '/home' }
+  { path: '**', redirectTo: '/login' }
 ];
 
 
